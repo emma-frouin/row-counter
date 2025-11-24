@@ -48,7 +48,7 @@ export function SetupScreen({ onComplete }) {
   return (
     <Layout>
       <div className="setup-screen">
-        <h1 className="setup-screen__title">Sophie Hood Counter</h1>
+        <h1 className="setup-screen__title">Row Counter</h1>
         <p className="setup-screen__subtitle">Let's set up your knitting pattern</p>
         
         <Card>

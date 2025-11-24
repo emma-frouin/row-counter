@@ -2,7 +2,7 @@
  * localStorage abstraction for counter state persistence.
  */
 
-const STORAGE_KEY = 'sophie_hood_counter_state';
+const STORAGE_KEY = 'row_counter_state';
 
 /**
  * Loads state from localStorage.

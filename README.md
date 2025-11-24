@@ -1,4 +1,4 @@
-# Sophie Hood Counter
+# Row Counter
 
 A simple, focused knitting row counter web app.
 

@@ -1,6 +1,6 @@
 {
-  "short_name": "Sophie Counter",
-  "name": "Sophie Hood Counter",
+  "short_name": "Row Counter",
+  "name": "Row Counter",
   "description": "A simple knitting row counter",
   "start_url": ".",
   "display": "standalone",

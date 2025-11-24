@@ -21,7 +21,7 @@ export function CounterScreen({ state, onAdvanceRow, onReset }) {
     <Layout>
       <div className="counter-screen">
         <div className="counter-screen__header">
-          <h1 className="counter-screen__title">Sophie Hood Counter</h1>
+          <h1 className="counter-screen__title">Row Counter</h1>
           <Button 
             variant="secondary" 
             size="small"

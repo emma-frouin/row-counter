@@ -37,7 +37,7 @@ describe('storageClient', () => {
       };
       const result = saveState(state);
       expect(result).toBe(true);
-      expect(localStorageMock.getItem('sophie_hood_counter_state')).toBeTruthy();
+      expect(localStorageMock.getItem('row_counter_state')).toBeTruthy();
     });
   });
 
