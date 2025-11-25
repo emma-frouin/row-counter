@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Layout } from '../ui/Layout.jsx';
 import { Card } from '../ui/Card.jsx';
 import { Button } from '../ui/Button.jsx';
-import { getUserProjects, deleteProject } from '../firebase/projectService';
+import { getUserProjects, deleteProject } from '../firebase/projectServiceNew';
 import { logOut } from '../firebase/authService';
 
 export function ProjectListScreen({ user, onSelectProject, onCreateNew, onLogout }) {
@@ -79,11 +79,8 @@ export function ProjectListScreen({ user, onSelectProject, onCreateNew, onLogout
                 <div className="project-card__content">
                   <h2 className="project-card__name">{project.name}</h2>
                   <div className="project-card__details">
-                    <span>Row {project.row} of {project.freq}</span>
-                    <span>{project.stitches} stitches</span>
-                    <span className={`project-card__mode project-card__mode--${project.mode}`}>
-                      {project.mode === 'increase' ? 'Increasing' : 'Decreasing'}
-                    </span>
+                    {project.yarn && <span>🧶 {project.yarn}</span>}
+                    <span>{project.counters?.length || 0} counter{project.counters?.length !== 1 ? 's' : ''}</span>
                   </div>
                 </div>
                 <div className="project-card__actions">
@@ -117,4 +114,5 @@ export function ProjectListScreen({ user, onSelectProject, onCreateNew, onLogout
     </Layout>
   );
 }
+
 
