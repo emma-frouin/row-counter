@@ -6,9 +6,9 @@ import { Message } from '../ui/Message.jsx';
 import { isAdjustmentRow, MODES } from '../state/counterState';
 import { playBeep } from '../utils/sound';
 
-export function CounterScreen({ state, onAdvanceRow, onReset }) {
-  const isAdjustment = isAdjustmentRow(state);
-  const adjustmentText = state.mode === MODES.INCREASE ? 'increasing' : 'decreasing';
+export function CounterScreen({ project, onAdvanceRow, onBackToProjects }) {
+  const isAdjustment = isAdjustmentRow(project);
+  const adjustmentText = project.mode === MODES.INCREASE ? 'increasing' : 'decreasing';
 
   // Play beep when entering adjustment row
   useEffect(() => {
@@ -21,14 +21,19 @@ export function CounterScreen({ state, onAdvanceRow, onReset }) {
     <Layout>
       <div className="counter-screen">
         <div className="counter-screen__header">
-          <h1 className="counter-screen__title">Row Counter</h1>
+          <div>
+            <h1 className="counter-screen__title">{project.name}</h1>
+            <p className="counter-screen__subtitle">
+              {project.mode === MODES.INCREASE ? 'Increasing' : 'Decreasing'} every {project.freq} rows
+            </p>
+          </div>
           <Button 
             variant="secondary" 
             size="small"
-            onClick={onReset}
-            className="counter-screen__reset"
+            onClick={onBackToProjects}
+            className="counter-screen__back"
           >
-            Reset & Change Setup
+            ← Projects
           </Button>
         </div>
 
@@ -37,7 +42,7 @@ export function CounterScreen({ state, onAdvanceRow, onReset }) {
           <div className="counter-info">
             <div className="counter-info__label">You are doing row</div>
             <div className="counter-info__value counter-info__value--large">
-              {state.row}
+              {project.row}
             </div>
           </div>
 
@@ -45,7 +50,7 @@ export function CounterScreen({ state, onAdvanceRow, onReset }) {
           <div className="counter-info">
             <div className="counter-info__label">Total stitches</div>
             <div className="counter-info__value">
-              {state.stitches}
+              {project.stitches}
             </div>
           </div>
 
@@ -62,16 +67,9 @@ export function CounterScreen({ state, onAdvanceRow, onReset }) {
             onClick={onAdvanceRow}
             className="counter-action"
           >
-            Row {state.row} Done
+            Row {project.row} Done
           </Button>
         </Card>
-
-        {/* Info Footer */}
-        <div className="counter-footer">
-          <p className="counter-footer__text">
-            {state.mode === MODES.INCREASE ? 'Increasing' : 'Decreasing'} every {state.freq} rows
-          </p>
-        </div>
       </div>
     </Layout>
   );

@@ -13,6 +13,27 @@
   max-width: 600px;
 }
 
+/* Auth Screen Layout */
+
+.auth-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.auth-screen__title {
+  font-size: 2rem;
+  text-align: center;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.auth-screen__subtitle {
+  text-align: center;
+  color: var(--color-text-light);
+  font-size: 1rem;
+}
+
 /* Setup Screen Layout */
 
 .setup-screen {
@@ -34,6 +55,44 @@
   font-size: 1rem;
 }
 
+/* Project List Screen Layout */
+
+.project-list-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.project-list-screen__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.project-list-screen__title {
+  font-size: 2rem;
+  color: var(--color-primary);
+}
+
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.project-list__loading,
+.project-list__empty {
+  text-align: center;
+  color: var(--color-text-light);
+  padding: var(--spacing-lg);
+}
+
+.project-list__create {
+  width: 100%;
+  margin-top: var(--spacing-md);
+}
+
 /* Counter Screen Layout */
 
 .counter-screen {
@@ -45,7 +104,7 @@
 .counter-screen__header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--spacing-md);
   flex-wrap: wrap;
 }
@@ -53,9 +112,15 @@
 .counter-screen__title {
   font-size: 1.5rem;
   color: var(--color-primary);
+  margin-bottom: var(--spacing-xs);
 }
 
-.counter-screen__reset {
+.counter-screen__subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+}
+
+.counter-screen__back {
   white-space: nowrap;
 }
 
@@ -107,6 +172,7 @@
 
 /* Form Layout */
 
+.auth-form,
 .setup-form {
   display: flex;
   flex-direction: column;
@@ -151,8 +217,46 @@
   margin-top: -0.25rem;
 }
 
-.setup-form__submit {
+.auth-form__error {
+  text-align: center;
+  margin-bottom: -var(--spacing-md);
+}
+
+.auth-form__submit {
   margin-top: var(--spacing-md);
+}
+
+.auth-form__toggle {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: var(--spacing-sm);
+  text-align: center;
+}
+
+.auth-form__toggle:hover {
+  text-decoration: underline;
+}
+
+.auth-form__toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.setup-form__actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.setup-form__actions .button {
+  flex: 1;
+}
+
+.setup-form__submit {
+  margin-top: 0;
 }
 
 /* Responsive */
