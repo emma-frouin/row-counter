@@ -217,6 +217,7 @@ export function App() {
         onAddCounter={handleAddCounter}
         onSelectCounter={handleSelectCounter}
         onBack={handleBackToProjectList}
+        onProjectUpdated={reloadProject}
       />
     );
   }
@@ -249,5 +250,6 @@ export function App() {
 
   return null;
 }
+
 
 

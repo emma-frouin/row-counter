@@ -3,13 +3,14 @@ import { Layout } from '../ui/Layout.jsx';
 import { Card } from '../ui/Card.jsx';
 import { Button } from '../ui/Button.jsx';
 import { Message } from '../ui/Message.jsx';
-import { isAdjustmentRow, calculateCurrentStitches, calculateTotalRows, MODES } from '../state/projectState';
+import { isAdjustmentRow, calculateCurrentStitches, calculateTotalRows, calculatePatternRow, MODES } from '../state/projectState';
 import { startContinuousSound, stopContinuousSound } from '../utils/continuousSound';
 
 export function CounterScreenNew({ project, counter, onAdvanceRow, onBackToProject }) {
   const isAdjustment = isAdjustmentRow(counter);
   const currentStitches = calculateCurrentStitches(counter);
   const totalRows = calculateTotalRows(counter);
+  const patternRow = calculatePatternRow(counter);
   const adjustmentText = counter.mode === MODES.INCREASE ? 'increasing' : 'decreasing';
 
   // Handle continuous sound for adjustment rows
@@ -45,10 +46,21 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onBackToProje
         </div>
 
         <Card className="counter-card-main">
-          {/* Current Row */}
+          {/* Pattern Row - the cycling row */}
           <div className="counter-info">
-            <div className="counter-info__label">You are doing row</div>
+            <div className="counter-info__label">Pattern row</div>
             <div className="counter-info__value counter-info__value--large">
+              {patternRow}
+            </div>
+            <div className="counter-info__sublabel">
+              of {counter.freq} in cycle
+            </div>
+          </div>
+
+          {/* Total Row Count */}
+          <div className="counter-info">
+            <div className="counter-info__label">Total row</div>
+            <div className="counter-info__value">
               {counter.currentRow}
             </div>
             <div className="counter-info__sublabel">
@@ -93,7 +105,7 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onBackToProje
               onClick={onAdvanceRow}
               className="counter-action"
             >
-              Row {counter.currentRow} Done
+              Pattern Row {patternRow} Done
             </Button>
           )}
 
@@ -123,5 +135,6 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onBackToProje
     </Layout>
   );
 }
+
 
 

@@ -40,16 +40,26 @@ export function calculateCurrentStitches(counter) {
 }
 
 /**
- * Check if current row is an adjustment row
+ * Calculate pattern row (position in the cycle, 1 to freq)
+ */
+export function calculatePatternRow(counter) {
+  const { currentRow, freq } = counter;
+  const patternRow = ((currentRow - 1) % freq) + 1;
+  return patternRow;
+}
+
+/**
+ * Check if current row is an adjustment row (last row in the pattern)
  */
 export function isAdjustmentRow(counter) {
-  const { mode, currentRow, freq } = counter;
+  const { mode, freq } = counter;
   
   if (mode === MODES.CONSTANT) {
     return false;
   }
   
-  return currentRow % freq === 0;
+  const patternRow = calculatePatternRow(counter);
+  return patternRow === freq;
 }
 
 /**
