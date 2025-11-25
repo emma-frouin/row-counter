@@ -89,28 +89,33 @@ export function validateCounter(counter) {
     errors.mode = 'Please select a mode';
   }
   
-  if (!counter.startStitches || counter.startStitches < 1) {
+  const startStitches = parseInt(counter.startStitches, 10);
+  const endStitches = parseInt(counter.endStitches, 10);
+  const freq = parseInt(counter.freq, 10);
+  const totalRows = parseInt(counter.totalRows, 10);
+  
+  if (!counter.startStitches || isNaN(startStitches) || startStitches < 1) {
     errors.startStitches = 'Start stitches must be at least 1';
   }
   
   if (counter.mode === MODES.CONSTANT) {
-    if (!counter.totalRows || counter.totalRows < 1) {
+    if (!counter.totalRows || isNaN(totalRows) || totalRows < 1) {
       errors.totalRows = 'Total rows must be at least 1';
     }
   } else {
-    if (!counter.endStitches || counter.endStitches < 1) {
+    if (!counter.endStitches || isNaN(endStitches) || endStitches < 1) {
       errors.endStitches = 'End stitches must be at least 1';
     }
     
-    if (!counter.freq || counter.freq < 1) {
+    if (!counter.freq || isNaN(freq) || freq < 1) {
       errors.freq = 'Frequency must be at least 1';
     }
     
-    if (counter.mode === MODES.INCREASE && counter.endStitches <= counter.startStitches) {
+    if (counter.mode === MODES.INCREASE && endStitches <= startStitches) {
       errors.endStitches = 'End stitches must be greater than start stitches for increasing';
     }
     
-    if (counter.mode === MODES.DECREASE && counter.endStitches >= counter.startStitches) {
+    if (counter.mode === MODES.DECREASE && endStitches >= startStitches) {
       errors.endStitches = 'End stitches must be less than start stitches for decreasing';
     }
   }
