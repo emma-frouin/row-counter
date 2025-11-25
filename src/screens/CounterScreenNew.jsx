@@ -46,27 +46,42 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onBackToProje
         </div>
 
         <Card className="counter-card-main">
-          {/* Pattern Row - the cycling row */}
-          <div className="counter-info">
-            <div className="counter-info__label">Pattern row</div>
-            <div className="counter-info__value counter-info__value--large">
-              {patternRow}
+          {/* For CONSTANT mode: only show total row */}
+          {counter.mode === MODES.CONSTANT ? (
+            <div className="counter-info">
+              <div className="counter-info__label">Row</div>
+              <div className="counter-info__value counter-info__value--large">
+                {counter.currentRow}
+              </div>
+              <div className="counter-info__sublabel">
+                of {totalRows} total
+              </div>
             </div>
-            <div className="counter-info__sublabel">
-              of {counter.freq} in cycle
-            </div>
-          </div>
+          ) : (
+            <>
+              {/* Pattern Row - the cycling row */}
+              <div className="counter-info">
+                <div className="counter-info__label">Pattern row</div>
+                <div className="counter-info__value counter-info__value--large">
+                  {patternRow}
+                </div>
+                <div className="counter-info__sublabel">
+                  of {counter.freq} in cycle
+                </div>
+              </div>
 
-          {/* Total Row Count */}
-          <div className="counter-info">
-            <div className="counter-info__label">Total row</div>
-            <div className="counter-info__value">
-              {counter.currentRow}
-            </div>
-            <div className="counter-info__sublabel">
-              of {totalRows} total
-            </div>
-          </div>
+              {/* Total Row Count */}
+              <div className="counter-info">
+                <div className="counter-info__label">Total row</div>
+                <div className="counter-info__value">
+                  {counter.currentRow}
+                </div>
+                <div className="counter-info__sublabel">
+                  of {totalRows} total
+                </div>
+              </div>
+            </>
+          )}
 
           {/* Current Stitches */}
           <div className="counter-info">
@@ -105,7 +120,10 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onBackToProje
               onClick={onAdvanceRow}
               className="counter-action"
             >
-              Pattern Row {patternRow} Done
+              {counter.mode === MODES.CONSTANT 
+                ? `Row ${counter.currentRow} Done`
+                : `Pattern Row ${patternRow} Done`
+              }
             </Button>
           )}
 
