@@ -25,6 +25,8 @@ export function calculateTotalRows(counter) {
 
 /**
  * Calculate current stitches based on row progress
+ * INCREASE: Increase happens on last row (row 6) of cycle
+ * DECREASE: Decrease happens on first row (row 1) of cycle
  */
 export function calculateCurrentStitches(counter) {
   const { mode, startStitches, endStitches, currentRow, freq } = counter;
@@ -33,10 +35,20 @@ export function calculateCurrentStitches(counter) {
     return startStitches;
   }
   
-  const cyclesCompleted = Math.floor((currentRow - 1) / freq);
-  const change = mode === MODES.INCREASE ? cyclesCompleted : -cyclesCompleted;
+  const patternRow = calculatePatternRow(counter);
+  const currentCycle = Math.floor((currentRow - 1) / freq);
   
-  return startStitches + change;
+  if (mode === MODES.INCREASE) {
+    // For increase: changes happen after completing the last row (row freq)
+    // So all rows in a cycle have the same stitch count
+    return startStitches + currentCycle;
+  } else {
+    // For decrease: decrease happens on row 1, then rows 2-freq have the new count
+    // Row 1: no decrease yet (current cycle count)
+    // Rows 2-freq: one more decrease completed
+    const decreasesCompleted = patternRow === 1 ? currentCycle : currentCycle + 1;
+    return startStitches - decreasesCompleted;
+  }
 }
 
 /**
@@ -49,7 +61,9 @@ export function calculatePatternRow(counter) {
 }
 
 /**
- * Check if current row is an adjustment row (last row in the pattern)
+ * Check if current row is an adjustment row
+ * INCREASE: adjustment happens on last row (row freq) - e.g., row 6
+ * DECREASE: adjustment happens on first row (row 1)
  */
 export function isAdjustmentRow(counter) {
   const { mode, freq } = counter;
@@ -59,7 +73,12 @@ export function isAdjustmentRow(counter) {
   }
   
   const patternRow = calculatePatternRow(counter);
-  return patternRow === freq;
+  
+  if (mode === MODES.INCREASE) {
+    return patternRow === freq; // Last row of cycle
+  } else {
+    return patternRow === 1; // First row of cycle
+  }
 }
 
 /**
