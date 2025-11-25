@@ -42,14 +42,21 @@ export async function getUserProjects(userId) {
   try {
     const q = query(
       collection(db, PROJECTS_COLLECTION),
-      where('userId', '==', userId),
-      orderBy('updatedAt', 'desc')
+      where('userId', '==', userId)
     );
     const querySnapshot = await getDocs(q);
     const projects = [];
     querySnapshot.forEach((doc) => {
       projects.push({ id: doc.id, ...doc.data() });
     });
+    
+    // Sort manually to avoid needing a composite index
+    projects.sort((a, b) => {
+      const aTime = a.updatedAt?.seconds || 0;
+      const bTime = b.updatedAt?.seconds || 0;
+      return bTime - aTime;
+    });
+    
     return { success: true, projects };
   } catch (error) {
     return { success: false, error: error.message };
