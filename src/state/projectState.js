@@ -185,20 +185,8 @@ export function validateCounter(counter) {
 }
 
 /**
- * Generate auto name from mode
- */
-function generateCounterName(mode) {
-  switch (mode) {
-    case MODES.INCREASE: return 'Increasing';
-    case MODES.DECREASE: return 'Decreasing';
-    case MODES.CONSTANT: return 'Constant';
-    default: return 'Counter';
-  }
-}
-
-/**
  * Create a new counter
- * - Name auto-generated if not provided
+ * - No name field (mode is self-explanatory)
  * - End stitches optional (null if not provided)
  * - Total rows optional for constant mode (null if not provided)
  */
@@ -210,7 +198,6 @@ export function createCounter(data) {
   
   return {
     id: Date.now().toString(),
-    name: data.name?.trim() || generateCounterName(data.mode),
     mode: data.mode,
     startStitches: startStitches,
     endStitches: data.mode === MODES.CONSTANT ? startStitches : endStitches,

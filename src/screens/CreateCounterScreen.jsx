@@ -5,7 +5,6 @@ import { Button } from '../ui/Button.jsx';
 import { MODES, validateCounter, createCounter } from '../state/projectState';
 
 export function CreateCounterScreen({ onComplete, onCancel }) {
-  const [name, setName] = useState('');
   const [mode, setMode] = useState('');
   const [startStitches, setStartStitches] = useState('');
   const [endStitches, setEndStitches] = useState('');
@@ -18,7 +17,6 @@ export function CreateCounterScreen({ onComplete, onCancel }) {
     setErrors({});
 
     const counterData = {
-      name,
       mode,
       startStitches,
       endStitches,
@@ -47,20 +45,6 @@ export function CreateCounterScreen({ onComplete, onCancel }) {
         
         <Card>
           <form onSubmit={handleSubmit} className="counter-form">
-            <div className="form-group">
-              <label className="form-label" htmlFor="name">
-                Phase Name <span style={{ color: 'var(--color-text-light)', fontWeight: 'normal' }}>(optional)</span>
-              </label>
-              <input
-                id="name"
-                type="text"
-                className="form-input"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Auto-generated if empty"
-              />
-            </div>
-
             <div className="form-group">
               <label className="form-label">Mode</label>
               <div className="radio-group">

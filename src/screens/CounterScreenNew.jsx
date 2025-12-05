@@ -32,10 +32,7 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplet
     <Layout>
       <div className="counter-screen-new">
         <div className="counter-screen-new__header">
-          <div>
-            <h1 className="counter-screen-new__title">{project.name}</h1>
-            <p className="counter-screen-new__subtitle">{counter.name}</p>
-          </div>
+          <h1 className="counter-screen-new__title">{project.name}</h1>
           <Button 
             variant="secondary" 
             size="small"

@@ -144,32 +144,118 @@
   gap: var(--spacing-lg);
 }
 
-/* Project Detail Screen */
+/* Project Detail Screen - Compact */
 
 .project-detail-screen {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-md);
 }
 
 .project-detail-screen__header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--spacing-md);
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .project-detail-screen__title {
-  font-size: 1.75rem;
+  font-size: 1.25rem;
   color: var(--color-primary);
-  margin-bottom: var(--spacing-xs);
+  margin: 0;
 }
 
 .project-detail-screen__yarn {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: var(--color-text-light);
 }
 
+/* Compact Notes */
+.project-notes-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Compact Links */
+.project-links-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.project-info__link {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.project-info__link:hover {
+  text-decoration: underline;
+}
+
+/* Compact Counters Section */
+.counters-section-compact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.counters-list-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Compact Counter Row */
+.counter-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: all 0.15s ease;
+}
+
+.counter-row:hover:not(.counter-row--completed) {
+  border-color: var(--color-primary);
+  background: #f8f9ff;
+}
+
+.counter-row--active {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.counter-row--completed {
+  opacity: 0.6;
+  background: var(--color-bg);
+}
+
+.counter-row__icon {
+  font-size: 1.25rem;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.counter-row__info {
+  flex: 1;
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.counter-row__badge {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.counter-row__action {
+  color: var(--color-primary);
+  font-size: 0.875rem;
+}
+
+/* Legacy styles for backward compatibility */
 .project-info {
   display: flex;
   flex-direction: column;
@@ -183,7 +269,7 @@
 }
 
 .project-info__label {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--color-text);
 }
@@ -193,24 +279,14 @@
   line-height: 1.6;
 }
 
-.project-info__link {
-  color: var(--color-primary);
-  text-decoration: none;
-  word-break: break-all;
-}
-
-.project-info__link:hover {
-  text-decoration: underline;
-}
-
 .counters-section {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 .counters-section__title {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--color-text);
 }
@@ -218,13 +294,13 @@
 .counters-section__empty {
   text-align: center;
   color: var(--color-text-light);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
 }
 
 .counters-list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
 .counters-section__add {
