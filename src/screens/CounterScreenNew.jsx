@@ -7,7 +7,7 @@ import { Timer } from '../ui/Timer.jsx';
 import { isAdjustmentRow, calculateCurrentStitches, calculateTotalRows, calculatePatternRow, hasTarget, MODES } from '../state/projectState';
 import { startContinuousSound, stopContinuousSound } from '../utils/continuousSound';
 
-export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplete, onResetCounter, onBackToProject, onToggleTimer }) {
+export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplete, onResetCounter, onBackToProject, onToggleTimer, onResetTimer }) {
   const isAdjustment = isAdjustmentRow(counter);
   const currentStitches = calculateCurrentStitches(counter);
   const totalRows = calculateTotalRows(counter);
@@ -39,6 +39,7 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplet
               totalTimeMs={project.totalTimeMs || 0}
               timerStartedAt={project.timerStartedAt}
               onToggle={onToggleTimer}
+              onReset={onResetTimer}
               compact
             />
             <Button 

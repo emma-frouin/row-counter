@@ -5,7 +5,7 @@ import { Button } from '../ui/Button.jsx';
 import { Timer } from '../ui/Timer.jsx';
 import { updateProject } from '../firebase/projectServiceNew';
 
-export function ProjectDetailScreen({ project, onAddCounter, onSelectCounter, onBack, onProjectUpdated, onToggleTimer }) {
+export function ProjectDetailScreen({ project, onAddCounter, onSelectCounter, onBack, onProjectUpdated, onToggleTimer, onResetTimer }) {
   const [isEditingSettings, setIsEditingSettings] = useState(false);
   const [editedProject, setEditedProject] = useState({
     name: project.name,
@@ -86,6 +86,7 @@ export function ProjectDetailScreen({ project, onAddCounter, onSelectCounter, on
               totalTimeMs={project.totalTimeMs || 0}
               timerStartedAt={project.timerStartedAt}
               onToggle={onToggleTimer}
+              onReset={onResetTimer}
               compact
             />
             {!isEditingSettings ? (

@@ -273,6 +273,7 @@ export function App() {
         onBack={handleBackToProjectList}
         onProjectUpdated={reloadProject}
         onToggleTimer={handleToggleTimer}
+        onResetTimer={handleResetTimer}
       />
     );
   }
@@ -301,6 +302,7 @@ export function App() {
           onResetCounter={handleResetCounter}
           onBackToProject={handleBackToProject}
           onToggleTimer={handleToggleTimer}
+          onResetTimer={handleResetTimer}
         />
       );
     }
