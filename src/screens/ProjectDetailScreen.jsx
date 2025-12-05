@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Layout } from '../ui/Layout.jsx';
 import { Card } from '../ui/Card.jsx';
 import { Button } from '../ui/Button.jsx';
+import { Timer } from '../ui/Timer.jsx';
 import { updateProject } from '../firebase/projectServiceNew';
 
-export function ProjectDetailScreen({ project, onAddCounter, onSelectCounter, onBack, onProjectUpdated }) {
+export function ProjectDetailScreen({ project, onAddCounter, onSelectCounter, onBack, onProjectUpdated, onToggleTimer }) {
   const [isEditingSettings, setIsEditingSettings] = useState(false);
   const [editedProject, setEditedProject] = useState({
     name: project.name,
@@ -80,7 +81,13 @@ export function ProjectDetailScreen({ project, onAddCounter, onSelectCounter, on
               />
             )}
           </div>
-          <div style={{ display: 'flex', gap: '0.25rem' }}>
+          <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+            <Timer 
+              totalTimeMs={project.totalTimeMs || 0}
+              timerStartedAt={project.timerStartedAt}
+              onToggle={onToggleTimer}
+              compact
+            />
             {!isEditingSettings ? (
               <>
                 <Button variant="secondary" size="small" onClick={() => setIsEditingSettings(true)}>✏️</Button>

@@ -11,7 +11,8 @@ import {
   getProject,
   addCounter,
   updateCounter,
-  setActiveCounter
+  setActiveCounter,
+  toggleTimer
 } from '../firebase/projectServiceNew';
 import { advanceCounter, markCounterComplete } from '../state/projectState';
 
@@ -169,6 +170,14 @@ export function App() {
     await reloadProject();
   };
 
+  // Handle timer toggle
+  const handleToggleTimer = async () => {
+    if (!currentProject) return;
+    
+    await toggleTimer(currentProject.id);
+    await reloadProject();
+  };
+
   // Handle going back to project detail
   const handleBackToProject = () => {
     setCurrentView(VIEWS.PROJECT_DETAIL);
@@ -240,6 +249,7 @@ export function App() {
         onSelectCounter={handleSelectCounter}
         onBack={handleBackToProjectList}
         onProjectUpdated={reloadProject}
+        onToggleTimer={handleToggleTimer}
       />
     );
   }
@@ -266,6 +276,7 @@ export function App() {
           onAdvanceRow={handleAdvanceRow}
           onMarkComplete={handleMarkComplete}
           onBackToProject={handleBackToProject}
+          onToggleTimer={handleToggleTimer}
         />
       );
     }

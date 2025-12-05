@@ -3,10 +3,11 @@ import { Layout } from '../ui/Layout.jsx';
 import { Card } from '../ui/Card.jsx';
 import { Button } from '../ui/Button.jsx';
 import { Message } from '../ui/Message.jsx';
+import { Timer } from '../ui/Timer.jsx';
 import { isAdjustmentRow, calculateCurrentStitches, calculateTotalRows, calculatePatternRow, hasTarget, MODES } from '../state/projectState';
 import { startContinuousSound, stopContinuousSound } from '../utils/continuousSound';
 
-export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplete, onBackToProject }) {
+export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplete, onBackToProject, onToggleTimer }) {
   const isAdjustment = isAdjustmentRow(counter);
   const currentStitches = calculateCurrentStitches(counter);
   const totalRows = calculateTotalRows(counter);
@@ -33,14 +34,22 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplet
       <div className="counter-screen-new">
         <div className="counter-screen-new__header">
           <h1 className="counter-screen-new__title">{project.name}</h1>
-          <Button 
-            variant="secondary" 
-            size="small"
-            onClick={onBackToProject}
-            className="counter-screen-new__back"
-          >
-            ←
-          </Button>
+          <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+            <Timer 
+              totalTimeMs={project.totalTimeMs || 0}
+              timerStartedAt={project.timerStartedAt}
+              onToggle={onToggleTimer}
+              compact
+            />
+            <Button 
+              variant="secondary" 
+              size="small"
+              onClick={onBackToProject}
+              className="counter-screen-new__back"
+            >
+              ←
+            </Button>
+          </div>
         </div>
 
         <Card className="counter-card-main">

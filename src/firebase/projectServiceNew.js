@@ -28,6 +28,9 @@ export async function createProject(userId, projectData) {
       patternFile: projectData.patternFile || null,
       counters: [],
       activeCounterId: null,
+      // Timer fields
+      totalTimeMs: 0,
+      timerStartedAt: null,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
@@ -191,6 +194,74 @@ export async function setActiveCounter(projectId, counterId) {
   try {
     await updateProject(projectId, { activeCounterId: counterId });
     return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Start the project timer
+ */
+export async function startTimer(projectId) {
+  try {
+    const projectRef = doc(db, PROJECTS_COLLECTION, projectId);
+    await updateDoc(projectRef, {
+      timerStartedAt: Date.now(),
+      updatedAt: serverTimestamp()
+    });
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Stop the project timer and accumulate time
+ */
+export async function stopTimer(projectId) {
+  try {
+    const result = await getProject(projectId);
+    if (!result.success) {
+      return result;
+    }
+    
+    const project = result.project;
+    if (!project.timerStartedAt) {
+      return { success: true }; // Timer wasn't running
+    }
+    
+    const elapsed = Date.now() - project.timerStartedAt;
+    const newTotalTime = (project.totalTimeMs || 0) + elapsed;
+    
+    const projectRef = doc(db, PROJECTS_COLLECTION, projectId);
+    await updateDoc(projectRef, {
+      totalTimeMs: newTotalTime,
+      timerStartedAt: null,
+      updatedAt: serverTimestamp()
+    });
+    
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Toggle timer (start if stopped, stop if running)
+ */
+export async function toggleTimer(projectId) {
+  try {
+    const result = await getProject(projectId);
+    if (!result.success) {
+      return result;
+    }
+    
+    const project = result.project;
+    if (project.timerStartedAt) {
+      return await stopTimer(projectId);
+    } else {
+      return await startTimer(projectId);
+    }
   } catch (error) {
     return { success: false, error: error.message };
   }
