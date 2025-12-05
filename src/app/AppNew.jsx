@@ -12,7 +12,8 @@ import {
   addCounter,
   updateCounter,
   setActiveCounter,
-  toggleTimer
+  toggleTimer,
+  resetTimer
 } from '../firebase/projectServiceNew';
 import { advanceCounter, markCounterComplete } from '../state/projectState';
 
@@ -170,11 +171,33 @@ export function App() {
     await reloadProject();
   };
 
+  // Handle resetting counter to row 1
+  const handleResetCounter = async () => {
+    if (!currentProject || !currentProject.activeCounterId) return;
+
+    // Update in Firebase - reset to row 1, not completed
+    await updateCounter(currentProject.id, currentProject.activeCounterId, {
+      currentRow: 1,
+      completed: false
+    });
+
+    // Reload project to get updated data
+    await reloadProject();
+  };
+
   // Handle timer toggle
   const handleToggleTimer = async () => {
     if (!currentProject) return;
     
     await toggleTimer(currentProject.id);
+    await reloadProject();
+  };
+
+  // Handle timer reset
+  const handleResetTimer = async () => {
+    if (!currentProject) return;
+    
+    await resetTimer(currentProject.id);
     await reloadProject();
   };
 
@@ -275,6 +298,7 @@ export function App() {
           counter={activeCounter}
           onAdvanceRow={handleAdvanceRow}
           onMarkComplete={handleMarkComplete}
+          onResetCounter={handleResetCounter}
           onBackToProject={handleBackToProject}
           onToggleTimer={handleToggleTimer}
         />

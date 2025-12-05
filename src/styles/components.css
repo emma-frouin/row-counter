@@ -379,6 +379,12 @@
 
 /* Compact Timer */
 
+.timer-compact-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+
 .timer-compact {
   display: inline-flex;
   align-items: center;
@@ -408,5 +414,39 @@
 
 .timer-compact__time {
   font-variant-numeric: tabular-nums;
+}
+
+.timer-compact-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  cursor: pointer;
+  color: var(--color-text-light);
+  transition: all 0.15s ease;
+}
+
+.timer-compact-reset:hover {
+  background: #fee2e2;
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+.timer__button--reset {
+  background: var(--color-bg);
+  color: var(--color-text-light);
+  border: 1px solid var(--color-border);
+}
+
+.timer__button--reset:hover {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #dc2626;
 }
 

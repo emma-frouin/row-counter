@@ -267,5 +267,22 @@ export async function toggleTimer(projectId) {
   }
 }
 
+/**
+ * Reset the project timer to zero
+ */
+export async function resetTimer(projectId) {
+  try {
+    const projectRef = doc(db, PROJECTS_COLLECTION, projectId);
+    await updateDoc(projectRef, {
+      totalTimeMs: 0,
+      timerStartedAt: null,
+      updatedAt: serverTimestamp()
+    });
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
 
 

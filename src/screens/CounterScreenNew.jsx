@@ -7,7 +7,7 @@ import { Timer } from '../ui/Timer.jsx';
 import { isAdjustmentRow, calculateCurrentStitches, calculateTotalRows, calculatePatternRow, hasTarget, MODES } from '../state/projectState';
 import { startContinuousSound, stopContinuousSound } from '../utils/continuousSound';
 
-export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplete, onBackToProject, onToggleTimer }) {
+export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplete, onResetCounter, onBackToProject, onToggleTimer }) {
   const isAdjustment = isAdjustmentRow(counter);
   const currentStitches = calculateCurrentStitches(counter);
   const totalRows = calculateTotalRows(counter);
@@ -154,16 +154,32 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplet
             </Message>
           )}
 
-          {/* Manual finish button for open-ended counters */}
-          {isOpenEnded && !counter.completed && (
-            <Button 
-              size="small" 
-              variant="secondary"
-              onClick={onMarkComplete}
-              style={{ alignSelf: 'center' }}
-            >
-              Mark as Finished
-            </Button>
+          {/* Action buttons for open-ended counters or reset */}
+          {!counter.completed && (
+            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+              {counter.currentRow > 1 && (
+                <Button 
+                  size="small" 
+                  variant="secondary"
+                  onClick={() => {
+                    if (window.confirm('Reset counter to row 1?')) {
+                      onResetCounter();
+                    }
+                  }}
+                >
+                  ↺ Reset
+                </Button>
+              )}
+              {isOpenEnded && (
+                <Button 
+                  size="small" 
+                  variant="secondary"
+                  onClick={onMarkComplete}
+                >
+                  ✓ Finish
+                </Button>
+              )}
+            </div>
           )}
         </Card>
 
