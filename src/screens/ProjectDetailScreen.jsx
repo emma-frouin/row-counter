@@ -224,8 +224,24 @@ export function ProjectDetailScreen({ project, onAddCounter, onSelectCounter, on
                   </div>
                   
                   <div className="counter-card__details">
-                    <div>Row {counter.currentRow} / {counter.mode === 'constant' ? counter.totalRows : Math.abs(counter.endStitches - counter.startStitches) * counter.freq}</div>
-                    <div>{counter.startStitches} → {counter.endStitches} stitches</div>
+                    {(() => {
+                      const hasEndTarget = counter.mode === 'constant' 
+                        ? counter.totalRows 
+                        : counter.endStitches && counter.endStitches !== counter.startStitches;
+                      const totalRows = hasEndTarget
+                        ? (counter.mode === 'constant' ? counter.totalRows : Math.abs(counter.endStitches - counter.startStitches) * counter.freq)
+                        : null;
+                      return (
+                        <>
+                          <div>Row {counter.currentRow}{totalRows ? ` / ${totalRows}` : ' (open)'}</div>
+                          {hasEndTarget ? (
+                            <div>{counter.startStitches} → {counter.endStitches} stitches</div>
+                          ) : (
+                            <div>{counter.startStitches} stitches</div>
+                          )}
+                        </>
+                      );
+                    })()}
                   </div>
 
                   {!counter.completed && (

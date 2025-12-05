@@ -49,7 +49,7 @@ export function CreateCounterScreen({ onComplete, onCancel }) {
           <form onSubmit={handleSubmit} className="counter-form">
             <div className="form-group">
               <label className="form-label" htmlFor="name">
-                Phase Name
+                Phase Name <span style={{ color: 'var(--color-text-light)', fontWeight: 'normal' }}>(optional)</span>
               </label>
               <input
                 id="name"
@@ -57,9 +57,8 @@ export function CreateCounterScreen({ onComplete, onCancel }) {
                 className="form-input"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g., Increasing, Body, Decreasing"
+                placeholder="Auto-generated if empty"
               />
-              {errors.name && <div className="form-error">{errors.name}</div>}
             </div>
 
             <div className="form-group">
@@ -118,22 +117,6 @@ export function CreateCounterScreen({ onComplete, onCancel }) {
             {mode !== MODES.CONSTANT && (
               <>
                 <div className="form-group">
-                  <label className="form-label" htmlFor="endStitches">
-                    Ending Stitches
-                  </label>
-                  <input
-                    id="endStitches"
-                    type="number"
-                    min="1"
-                    className="form-input"
-                    value={endStitches}
-                    onChange={(e) => setEndStitches(e.target.value)}
-                    placeholder="e.g., 80"
-                  />
-                  {errors.endStitches && <div className="form-error">{errors.endStitches}</div>}
-                </div>
-
-                <div className="form-group">
                   <label className="form-label" htmlFor="freq">
                     Every how many rows do you {mode === MODES.INCREASE ? 'increase' : 'decrease'}?
                   </label>
@@ -149,6 +132,25 @@ export function CreateCounterScreen({ onComplete, onCancel }) {
                   {errors.freq && <div className="form-error">{errors.freq}</div>}
                 </div>
 
+                <div className="form-group">
+                  <label className="form-label" htmlFor="endStitches">
+                    Target Stitches <span style={{ color: 'var(--color-text-light)', fontWeight: 'normal' }}>(optional)</span>
+                  </label>
+                  <input
+                    id="endStitches"
+                    type="number"
+                    min="1"
+                    className="form-input"
+                    value={endStitches}
+                    onChange={(e) => setEndStitches(e.target.value)}
+                    placeholder="Leave empty if unknown"
+                  />
+                  <p style={{ fontSize: '0.875rem', color: 'var(--color-text-light)', marginTop: '0.25rem' }}>
+                    If set, counter completes automatically. Otherwise, you finish manually.
+                  </p>
+                  {errors.endStitches && <div className="form-error">{errors.endStitches}</div>}
+                </div>
+
                 {startStitches && endStitches && freq && (
                   <div className="counter-calc">
                     <p>This phase will be <strong>{Math.abs(parseInt(endStitches) - parseInt(startStitches)) * parseInt(freq)}</strong> rows</p>
@@ -160,7 +162,7 @@ export function CreateCounterScreen({ onComplete, onCancel }) {
             {mode === MODES.CONSTANT && (
               <div className="form-group">
                 <label className="form-label" htmlFor="totalRows">
-                  How many rows for this phase?
+                  How many rows for this phase? <span style={{ color: 'var(--color-text-light)', fontWeight: 'normal' }}>(optional)</span>
                 </label>
                 <input
                   id="totalRows"
@@ -169,8 +171,11 @@ export function CreateCounterScreen({ onComplete, onCancel }) {
                   className="form-input"
                   value={totalRows}
                   onChange={(e) => setTotalRows(e.target.value)}
-                  placeholder="e.g., 40"
+                  placeholder="Leave empty if unknown"
                 />
+                <p style={{ fontSize: '0.875rem', color: 'var(--color-text-light)', marginTop: '0.25rem' }}>
+                  If set, counter completes automatically. Otherwise, you finish manually.
+                </p>
                 {errors.totalRows && <div className="form-error">{errors.totalRows}</div>}
               </div>
             )}

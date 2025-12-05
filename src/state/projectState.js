@@ -10,17 +10,30 @@ export const MODES = {
 
 /**
  * Calculate total rows needed for a counter phase
+ * Returns null if no target is set (open-ended counter)
  */
 export function calculateTotalRows(counter) {
   const { mode, startStitches, endStitches, freq } = counter;
   
   if (mode === MODES.CONSTANT) {
-    // For constant mode, user specifies total rows directly
-    return counter.totalRows || 0;
+    // For constant mode, user specifies total rows directly (or null if open-ended)
+    return counter.totalRows || null;
+  }
+  
+  // If no end stitches set, it's open-ended
+  if (!endStitches || endStitches === startStitches) {
+    return null;
   }
   
   const stitchDiff = Math.abs(endStitches - startStitches);
   return stitchDiff * freq;
+}
+
+/**
+ * Check if counter has a target (not open-ended)
+ */
+export function hasTarget(counter) {
+  return calculateTotalRows(counter) !== null;
 }
 
 /**
@@ -83,36 +96,54 @@ export function isAdjustmentRow(counter) {
 
 /**
  * Advance the counter by one row
+ * Completion happens AFTER you click "Done" on the last row
  */
 export function advanceCounter(counter) {
   const totalRows = calculateTotalRows(counter);
-  const newRow = counter.currentRow + 1;
   
-  // Check if counter is complete
-  if (newRow > totalRows) {
+  // If open-ended (no target), just keep counting
+  if (totalRows === null) {
     return {
       ...counter,
-      currentRow: totalRows,
+      currentRow: counter.currentRow + 1
+    };
+  }
+  
+  // If we're ON the last row and clicking "Done", we've completed it
+  if (counter.currentRow === totalRows) {
+    return {
+      ...counter,
       completed: true
     };
   }
   
+  // Otherwise just increment
   return {
     ...counter,
-    currentRow: newRow,
-    completed: newRow === totalRows
+    currentRow: counter.currentRow + 1
+  };
+}
+
+/**
+ * Manually mark a counter as complete (for open-ended counters)
+ */
+export function markCounterComplete(counter) {
+  return {
+    ...counter,
+    completed: true
   };
 }
 
 /**
  * Validate counter data
+ * - Name is optional (auto-generated from mode)
+ * - End stitches is optional (makes counter open-ended)
+ * - Total rows is optional for constant mode (makes it open-ended)
  */
 export function validateCounter(counter) {
   const errors = {};
   
-  if (!counter.name || counter.name.trim() === '') {
-    errors.name = 'Counter name is required';
-  }
+  // Name is now optional - will be auto-generated
   
   if (!counter.mode) {
     errors.mode = 'Please select a mode';
@@ -128,24 +159,22 @@ export function validateCounter(counter) {
   }
   
   if (counter.mode === MODES.CONSTANT) {
-    if (!counter.totalRows || isNaN(totalRows) || totalRows < 1) {
-      errors.totalRows = 'Total rows must be at least 1';
-    }
+    // Total rows is optional for constant mode (open-ended if not set)
   } else {
-    if (!counter.endStitches || isNaN(endStitches) || endStitches < 1) {
-      errors.endStitches = 'End stitches must be at least 1';
+    // End stitches is optional (open-ended if not set)
+    // But if provided, must be valid
+    if (counter.endStitches && !isNaN(endStitches)) {
+      if (counter.mode === MODES.INCREASE && endStitches <= startStitches) {
+        errors.endStitches = 'End stitches must be greater than start stitches for increasing';
+      }
+      
+      if (counter.mode === MODES.DECREASE && endStitches >= startStitches) {
+        errors.endStitches = 'End stitches must be less than start stitches for decreasing';
+      }
     }
     
     if (!counter.freq || isNaN(freq) || freq < 1) {
       errors.freq = 'Frequency must be at least 1';
-    }
-    
-    if (counter.mode === MODES.INCREASE && endStitches <= startStitches) {
-      errors.endStitches = 'End stitches must be greater than start stitches for increasing';
-    }
-    
-    if (counter.mode === MODES.DECREASE && endStitches >= startStitches) {
-      errors.endStitches = 'End stitches must be less than start stitches for decreasing';
     }
   }
   
@@ -156,17 +185,37 @@ export function validateCounter(counter) {
 }
 
 /**
+ * Generate auto name from mode
+ */
+function generateCounterName(mode) {
+  switch (mode) {
+    case MODES.INCREASE: return 'Increasing';
+    case MODES.DECREASE: return 'Decreasing';
+    case MODES.CONSTANT: return 'Constant';
+    default: return 'Counter';
+  }
+}
+
+/**
  * Create a new counter
+ * - Name auto-generated if not provided
+ * - End stitches optional (null if not provided)
+ * - Total rows optional for constant mode (null if not provided)
  */
 export function createCounter(data) {
+  const startStitches = parseInt(data.startStitches, 10);
+  const endStitches = data.endStitches ? parseInt(data.endStitches, 10) : null;
+  const freq = data.freq ? parseInt(data.freq, 10) : 1;
+  const totalRows = data.totalRows ? parseInt(data.totalRows, 10) : null;
+  
   return {
     id: Date.now().toString(),
-    name: data.name,
+    name: data.name?.trim() || generateCounterName(data.mode),
     mode: data.mode,
-    startStitches: parseInt(data.startStitches, 10),
-    endStitches: data.mode === MODES.CONSTANT ? parseInt(data.startStitches, 10) : parseInt(data.endStitches, 10),
-    freq: data.mode === MODES.CONSTANT ? 1 : parseInt(data.freq, 10),
-    totalRows: data.mode === MODES.CONSTANT ? parseInt(data.totalRows, 10) : null,
+    startStitches: startStitches,
+    endStitches: data.mode === MODES.CONSTANT ? startStitches : endStitches,
+    freq: data.mode === MODES.CONSTANT ? 1 : freq,
+    totalRows: data.mode === MODES.CONSTANT ? totalRows : null,
     currentRow: 1,
     completed: false
   };

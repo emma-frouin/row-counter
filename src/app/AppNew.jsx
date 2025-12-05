@@ -13,7 +13,7 @@ import {
   updateCounter,
   setActiveCounter
 } from '../firebase/projectServiceNew';
-import { advanceCounter } from '../state/projectState';
+import { advanceCounter, markCounterComplete } from '../state/projectState';
 
 const VIEWS = {
   AUTH: 'auth',
@@ -147,6 +147,28 @@ export function App() {
     await reloadProject();
   };
 
+  // Handle manually marking counter as complete (for open-ended counters)
+  const handleMarkComplete = async () => {
+    if (!currentProject || !currentProject.activeCounterId) return;
+
+    const activeCounter = currentProject.counters.find(
+      c => c.id === currentProject.activeCounterId
+    );
+    
+    if (!activeCounter) return;
+
+    // Mark as complete
+    const newCounter = markCounterComplete(activeCounter);
+    
+    // Update in Firebase
+    await updateCounter(currentProject.id, activeCounter.id, {
+      completed: newCounter.completed
+    });
+
+    // Reload project to get updated data
+    await reloadProject();
+  };
+
   // Handle going back to project detail
   const handleBackToProject = () => {
     setCurrentView(VIEWS.PROJECT_DETAIL);
@@ -242,6 +264,7 @@ export function App() {
           project={currentProject}
           counter={activeCounter}
           onAdvanceRow={handleAdvanceRow}
+          onMarkComplete={handleMarkComplete}
           onBackToProject={handleBackToProject}
         />
       );
