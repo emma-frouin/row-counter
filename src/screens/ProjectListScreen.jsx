@@ -1,9 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Layout } from '../ui/Layout.jsx';
-import { Card } from '../ui/Card.jsx';
 import { Button } from '../ui/Button.jsx';
 import { getUserProjects, deleteProject } from '../firebase/projectServiceNew';
 import { logOut } from '../firebase/authService';
+
+/**
+ * Format milliseconds to compact time string
+ */
+function formatTime(ms) {
+  if (!ms || ms < 0) return '0:00';
+  
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  
+  if (hours > 0) {
+    return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
 
 export function ProjectListScreen({ user, onSelectProject, onCreateNew, onLogout }) {
   const [projects, setProjects] = useState([]);
@@ -26,8 +42,9 @@ export function ProjectListScreen({ user, onSelectProject, onCreateNew, onLogout
     }
   };
 
-  const handleDelete = async (projectId, projectName) => {
-    if (!window.confirm(`Delete "${projectName}"? This cannot be undone.`)) {
+  const handleDelete = async (e, projectId, projectName) => {
+    e.stopPropagation(); // Don't trigger row click
+    if (!window.confirm(`Delete "${projectName}"?`)) {
       return;
     }
 
@@ -50,13 +67,13 @@ export function ProjectListScreen({ user, onSelectProject, onCreateNew, onLogout
     <Layout>
       <div className="project-list-screen">
         <div className="project-list-screen__header">
-          <h1 className="project-list-screen__title">My Projects</h1>
+          <h1 className="project-list-screen__title">Projects</h1>
           <Button 
             variant="secondary" 
             size="small"
             onClick={handleLogout}
           >
-            Sign Out
+            ↪
           </Button>
         </div>
 
@@ -65,50 +82,53 @@ export function ProjectListScreen({ user, onSelectProject, onCreateNew, onLogout
         )}
 
         {loading ? (
-          <Card>
-            <p className="project-list__loading">Loading projects...</p>
-          </Card>
+          <p style={{ textAlign: 'center', color: 'var(--color-text-light)', padding: '1rem' }}>Loading...</p>
         ) : projects.length === 0 ? (
-          <Card>
-            <p className="project-list__empty">No projects yet. Create your first one!</p>
-          </Card>
+          <p style={{ textAlign: 'center', color: 'var(--color-text-light)', padding: '1rem' }}>No projects yet</p>
         ) : (
-          <div className="project-list">
-            {projects.map((project) => (
-              <Card key={project.id} className="project-card">
-                <div className="project-card__content">
-                  <h2 className="project-card__name">{project.name}</h2>
-                  <div className="project-card__details">
-                    {project.yarn && <span>🧶 {project.yarn}</span>}
-                    <span>{project.counters?.length || 0} counter{project.counters?.length !== 1 ? 's' : ''}</span>
+          <div className="project-list-compact">
+            {projects.map((project) => {
+              const counterCount = project.counters?.length || 0;
+              const isTimerRunning = !!project.timerStartedAt;
+              const totalTime = project.totalTimeMs || 0;
+              
+              return (
+                <div 
+                  key={project.id} 
+                  className={`project-row ${isTimerRunning ? 'project-row--active' : ''}`}
+                  onClick={() => onSelectProject(project)}
+                >
+                  <div className="project-row__main">
+                    <span className="project-row__name">{project.name}</span>
+                    <span className="project-row__meta">
+                      {counterCount > 0 && `${counterCount} counter${counterCount !== 1 ? 's' : ''}`}
+                      {project.yarn && ` · 🧶`}
+                    </span>
+                  </div>
+                  <div className="project-row__right">
+                    <span className={`project-row__time ${isTimerRunning ? 'project-row__time--running' : ''}`}>
+                      {isTimerRunning ? '⏸' : '⏱'} {formatTime(totalTime)}
+                    </span>
+                    <button 
+                      className="project-row__delete"
+                      onClick={(e) => handleDelete(e, project.id, project.name)}
+                      title="Delete"
+                    >
+                      ✕
+                    </button>
                   </div>
                 </div>
-                <div className="project-card__actions">
-                  <Button 
-                    onClick={() => onSelectProject(project)}
-                    size="medium"
-                  >
-                    Open
-                  </Button>
-                  <Button 
-                    variant="secondary" 
-                    size="medium"
-                    onClick={() => handleDelete(project.id, project.name)}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </Card>
-            ))}
+              );
+            })}
           </div>
         )}
 
         <Button 
-          size="large" 
+          size="medium" 
           onClick={onCreateNew}
-          className="project-list__create"
+          style={{ width: '100%', marginTop: '0.5rem' }}
         >
-          + Create New Project
+          + New Project
         </Button>
       </div>
     </Layout>
