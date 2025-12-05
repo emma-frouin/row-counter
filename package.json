@@ -1,7 +1,7 @@
 {
-  "name": "row-counter",
+  "name": "tricoti",
   "version": "1.0.0",
-  "description": "A simple knitting row counter web app",
+  "description": "Tricoti - Your knitting companion",
   "private": true,
   "scripts": {
     "dev": "vite",

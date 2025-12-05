@@ -1,7 +1,7 @@
 {
-  "short_name": "Row Counter",
-  "name": "Row Counter",
-  "description": "A simple knitting row counter",
+  "short_name": "Tricoti",
+  "name": "Tricoti",
+  "description": "Your knitting companion",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#6366f1",

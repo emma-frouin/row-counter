@@ -50,7 +50,7 @@ export function AuthScreen({ onAuthSuccess }) {
   return (
     <Layout>
       <div className="auth-screen">
-        <h1 className="auth-screen__title">Row Counter</h1>
+        <h1 className="auth-screen__title">Tricoti 🧶</h1>
         <p className="auth-screen__subtitle">
           {isSignUp ? 'Create an account to sync your projects' : 'Sign in to access your projects'}
         </p>
