@@ -42,7 +42,7 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplet
             onClick={onBackToProject}
             className="counter-screen-new__back"
           >
-            ← Project
+            ←
           </Button>
         </div>
 
@@ -56,62 +56,48 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplet
               </div>
               {!isOpenEnded && (
                 <div className="counter-info__sublabel">
-                  of {totalRows} total
+                  of {totalRows}
                 </div>
               )}
             </div>
           ) : (
             <>
-              {/* Pattern Row - the cycling row */}
+              {/* Pattern Row - the main display */}
               <div className="counter-info">
                 <div className="counter-info__label">Pattern row</div>
                 <div className="counter-info__value counter-info__value--large">
-                  {patternRow}
-                </div>
-                <div className="counter-info__sublabel">
-                  of {counter.freq} in cycle
+                  {patternRow} <span style={{ fontSize: '1rem', fontWeight: 'normal', color: 'var(--color-text-light)' }}>/ {counter.freq}</span>
                 </div>
               </div>
 
-              {/* Total Row Count */}
-              <div className="counter-info">
-                <div className="counter-info__label">Total row</div>
-                <div className="counter-info__value">
-                  {counter.currentRow}
-                </div>
-                {!isOpenEnded && (
-                  <div className="counter-info__sublabel">
-                    of {totalRows} total
+              {/* Total Row & Stitches - inline */}
+              <div className="counter-row-info">
+                <div className="counter-info">
+                  <div className="counter-info__label">Total row</div>
+                  <div className="counter-info__value">
+                    {counter.currentRow}{!isOpenEnded && <span style={{ fontSize: '0.875rem', fontWeight: 'normal', color: 'var(--color-text-light)' }}> / {totalRows}</span>}
                   </div>
-                )}
+                </div>
+                <div className="counter-info">
+                  <div className="counter-info__label">Stitches</div>
+                  <div className="counter-info__value">
+                    {currentStitches}
+                  </div>
+                </div>
               </div>
             </>
           )}
 
-          {/* Current Stitches */}
-          <div className="counter-info">
-            <div className="counter-info__label">Current stitches</div>
-            <div className="counter-info__value">
-              {currentStitches}
+          {/* For constant mode, show stitches separately */}
+          {counter.mode === MODES.CONSTANT && (
+            <div className="counter-info">
+              <div className="counter-info__label">Stitches</div>
+              <div className="counter-info__value">{currentStitches}</div>
             </div>
-          </div>
-
-          {/* Adjustment Row Alert */}
-          {isAdjustment && counter.mode !== MODES.CONSTANT && !counter.completed && (
-            <Message type="warning" className="counter-alert">
-              🔔 You're {adjustmentText} on this row
-            </Message>
-          )}
-
-          {/* Completed Message */}
-          {counter.completed && (
-            <Message type="info" className="counter-alert">
-              ✓ This phase is complete!
-            </Message>
           )}
 
           {/* Progress Bar - only show if there's a target */}
-          {!isOpenEnded && (
+          {!isOpenEnded && !counter.completed && (
             <div className="counter-progress">
               <div 
                 className="counter-progress__bar" 
@@ -120,32 +106,18 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplet
             </div>
           )}
 
-          {/* Main Action Button */}
+          {/* Main Action Button - ALWAYS at the same position */}
           {!counter.completed && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <Button 
-                size="large" 
-                onClick={onAdvanceRow}
-                className="counter-action"
-              >
-                {counter.mode === MODES.CONSTANT 
-                  ? `Row ${counter.currentRow} Done`
-                  : `Pattern Row ${patternRow} Done`
-                }
-              </Button>
-              
-              {/* Manual finish button for open-ended counters */}
-              {isOpenEnded && (
-                <Button 
-                  size="medium" 
-                  variant="secondary"
-                  onClick={onMarkComplete}
-                  className="counter-action"
-                >
-                  ✓ Mark Phase as Finished
-                </Button>
-              )}
-            </div>
+            <Button 
+              size="large" 
+              onClick={onAdvanceRow}
+              className="counter-action"
+            >
+              {counter.mode === MODES.CONSTANT 
+                ? `Row ${counter.currentRow} Done`
+                : `Row ${patternRow} Done`
+              }
+            </Button>
           )}
 
           {counter.completed && (
@@ -157,25 +129,47 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplet
               Back to Project
             </Button>
           )}
+
+          {/* Alert container - BELOW the button with fixed height */}
+          {counter.mode !== MODES.CONSTANT && !counter.completed && (
+            <div className="counter-alert-container">
+              {isAdjustment ? (
+                <Message type="warning" className="counter-alert">
+                  🔔 {counter.mode === MODES.INCREASE ? 'Increase' : 'Decrease'} on this row!
+                </Message>
+              ) : null}
+            </div>
+          )}
+
+          {/* Completed Message */}
+          {counter.completed && (
+            <Message type="info" className="counter-alert">
+              ✓ Phase complete!
+            </Message>
+          )}
+
+          {/* Manual finish button for open-ended counters */}
+          {isOpenEnded && !counter.completed && (
+            <Button 
+              size="small" 
+              variant="secondary"
+              onClick={onMarkComplete}
+              style={{ alignSelf: 'center' }}
+            >
+              Mark as Finished
+            </Button>
+          )}
         </Card>
 
         {/* Phase Info Footer */}
         <div className="counter-footer">
           <p className="counter-footer__text">
-            {counter.mode === MODES.INCREASE && `Increasing every ${counter.freq} rows`}
-            {counter.mode === MODES.DECREASE && `Decreasing every ${counter.freq} rows`}
-            {counter.mode === MODES.CONSTANT && `Constant ${counter.startStitches} stitches`}
+            {counter.mode === MODES.INCREASE && `↗ Every ${counter.freq} rows`}
+            {counter.mode === MODES.DECREASE && `↘ Every ${counter.freq} rows`}
+            {counter.mode === MODES.CONSTANT && `Constant`}
+            {!isOpenEnded && counter.endStitches && ` · ${counter.startStitches}→${counter.endStitches}`}
+            {isOpenEnded && ` · Open-ended`}
           </p>
-          {!isOpenEnded && counter.endStitches && (
-            <p className="counter-footer__text">
-              {counter.startStitches} → {counter.endStitches} stitches
-            </p>
-          )}
-          {isOpenEnded && (
-            <p className="counter-footer__text" style={{ fontStyle: 'italic' }}>
-              Open-ended (finish manually when ready)
-            </p>
-          )}
         </div>
       </div>
     </Layout>

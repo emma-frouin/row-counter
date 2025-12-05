@@ -258,29 +258,30 @@
   gap: var(--spacing-lg);
 }
 
-/* Counter Screen New */
+/* Counter Screen New - Compact layout */
 
 .counter-screen-new {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-md);
+  height: 100%;
 }
 
 .counter-screen-new__header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
 .counter-screen-new__title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: var(--color-primary);
-  margin-bottom: var(--spacing-xs);
+  margin-bottom: 0;
 }
 
 .counter-screen-new__subtitle {
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: var(--color-text-light);
 }
 
@@ -291,60 +292,88 @@
 .counter-card-main {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
 }
 
 .counter-info__sublabel {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: var(--color-text-light);
   text-align: center;
-  margin-top: var(--spacing-xs);
+  margin-top: 2px;
 }
 
 .counter-card {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 .counter-info {
   text-align: center;
-  padding: var(--spacing-md) 0;
+  padding: var(--spacing-xs) 0;
 }
 
 .counter-info__label {
-  font-size: 1rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--color-text-light);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 2px;
 }
 
 .counter-info__value {
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   font-weight: 600;
   color: var(--color-primary);
+  line-height: 1;
 }
 
 .counter-info__value--large {
-  font-size: 4rem;
+  font-size: 3rem;
+}
+
+/* Row info displayed inline for compactness */
+.counter-row-info {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-sm) 0;
+}
+
+.counter-row-info .counter-info {
+  padding: 0;
+}
+
+/* Alert container with fixed height to prevent layout shift */
+.counter-alert-container {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .counter-alert {
-  margin: var(--spacing-md) 0;
+  margin: 0;
+  width: 100%;
 }
 
+/* Smaller action button */
 .counter-action {
   width: 100%;
-  font-size: 1.5rem;
-  padding: var(--spacing-xl);
+  font-size: 1.125rem;
+  padding: var(--spacing-md) var(--spacing-lg);
 }
 
 .counter-footer {
   text-align: center;
+  margin-top: auto;
+  padding-top: var(--spacing-sm);
 }
 
 .counter-footer__text {
   color: var(--color-text-light);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 /* Form Layout */
