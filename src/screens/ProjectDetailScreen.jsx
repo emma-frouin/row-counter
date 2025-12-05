@@ -91,8 +91,8 @@ export function ProjectDetailScreen({ project, onAddCounter, onSelectCounter, on
             />
             {!isEditingSettings ? (
               <>
-                <Button variant="secondary" size="small" onClick={() => setIsEditingSettings(true)}>✏️</Button>
-                <Button variant="secondary" size="small" onClick={onBack}>←</Button>
+                <Button variant="secondary" size="small" onClick={() => setIsEditingSettings(true)} title="Edit project">✏️</Button>
+                <Button variant="secondary" size="small" onClick={onBack} title="Go to home">🏠</Button>
               </>
             ) : (
               <>
@@ -142,6 +142,15 @@ export function ProjectDetailScreen({ project, onAddCounter, onSelectCounter, on
                   className="form-input"
                   style={{ fontSize: '0.875rem' }}
                 />
+                {/* Save/Cancel buttons at bottom of form */}
+                <div className="form-actions">
+                  <Button variant="secondary" size="medium" onClick={handleCancelSettings}>
+                    Cancel
+                  </Button>
+                  <Button variant="primary" size="medium" onClick={handleSaveSettings}>
+                    Save
+                  </Button>
+                </div>
               </>
             )}
             {!isEditingSettings && (

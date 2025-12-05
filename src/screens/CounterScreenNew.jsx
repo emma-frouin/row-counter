@@ -7,7 +7,7 @@ import { Timer } from '../ui/Timer.jsx';
 import { isAdjustmentRow, calculateCurrentStitches, calculateTotalRows, calculatePatternRow, hasTarget, MODES } from '../state/projectState';
 import { startContinuousSound, stopContinuousSound } from '../utils/continuousSound';
 
-export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplete, onResetCounter, onBackToProject, onToggleTimer, onResetTimer }) {
+export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplete, onResetCounter, onBackToProject, onHome, onToggleTimer, onResetTimer }) {
   const isAdjustment = isAdjustmentRow(counter);
   const currentStitches = calculateCurrentStitches(counter);
   const totalRows = calculateTotalRows(counter);
@@ -46,9 +46,17 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplet
               variant="secondary" 
               size="small"
               onClick={onBackToProject}
-              className="counter-screen-new__back"
+              title="Back to project"
             >
               ←
+            </Button>
+            <Button 
+              variant="secondary" 
+              size="small"
+              onClick={onHome}
+              title="Go to home"
+            >
+              🏠
             </Button>
           </div>
         </div>
@@ -182,18 +190,16 @@ export function CounterScreenNew({ project, counter, onAdvanceRow, onMarkComplet
               )}
             </div>
           )}
-        </Card>
 
-        {/* Phase Info Footer */}
-        <div className="counter-footer">
-          <p className="counter-footer__text">
+          {/* Phase Info - inside card */}
+          <div className="counter-phase-info">
             {counter.mode === MODES.INCREASE && `↗ Every ${counter.freq} rows`}
             {counter.mode === MODES.DECREASE && `↘ Every ${counter.freq} rows`}
-            {counter.mode === MODES.CONSTANT && `Constant`}
+            {counter.mode === MODES.CONSTANT && `→ Constant`}
             {!isOpenEnded && counter.endStitches && ` · ${counter.startStitches}→${counter.endStitches}`}
             {isOpenEnded && ` · Open-ended`}
-          </p>
-        </div>
+          </div>
+        </Card>
       </div>
     </Layout>
   );

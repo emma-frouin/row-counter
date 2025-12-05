@@ -64,7 +64,12 @@ export function CreateProjectScreen({ userId, onComplete, onCancel }) {
   return (
     <Layout>
       <div className="create-project-screen">
-        <h1 className="create-project-screen__title">Create New Project</h1>
+        <div className="create-screen__header">
+          <h1 className="create-project-screen__title">Create New Project</h1>
+          <Button variant="secondary" size="small" onClick={onCancel} title="Back">
+            ←
+          </Button>
+        </div>
         
         <Card>
           <form onSubmit={handleSubmit} className="project-form">

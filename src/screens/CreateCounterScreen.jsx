@@ -38,7 +38,12 @@ export function CreateCounterScreen({ onComplete, onCancel }) {
   return (
     <Layout>
       <div className="create-counter-screen">
-        <h1 className="create-counter-screen__title">Add Counter / Phase</h1>
+        <div className="create-screen__header">
+          <h1 className="create-counter-screen__title">Add Counter / Phase</h1>
+          <Button variant="secondary" size="small" onClick={onCancel} title="Back">
+            ←
+          </Button>
+        </div>
         <p className="create-counter-screen__subtitle">
           Add a new counting phase to your project
         </p>

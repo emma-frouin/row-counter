@@ -301,6 +301,7 @@ export function App() {
           onMarkComplete={handleMarkComplete}
           onResetCounter={handleResetCounter}
           onBackToProject={handleBackToProject}
+          onHome={handleBackToProjectList}
           onToggleTimer={handleToggleTimer}
           onResetTimer={handleResetTimer}
         />
